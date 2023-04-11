@@ -3,6 +3,7 @@ package juno.repository;
 import juno.model.BaseEntity;
 import juno.repository.exception.EntityNotFoundException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -34,9 +35,27 @@ public class InMemoryRepository<TKey, TData extends BaseEntity<Integer>> impleme
     }
 
     @Override
+    public ArrayList<TData> getAll() {
+        ArrayList<TData> allTodos = new ArrayList<TData>();
+        int max = 100000;
+        int min = 1;
+        int range = max - min + 1;
+        // IDS can range from 1 to 100000
+        for(int i = 0; i<= range; i++) {
+            if (this.entities.containsKey(i)) {
+                allTodos.add(this.entities.get(i));
+            }
+        }
+        return allTodos;
+    }
+
+    @Override
     public void deleteOne(Integer id) {
         if(this.entities.containsKey(id)) {
             this.entities.remove(id);
+            System.out.println("Successfully deleted the task!");
+        } else {
+            System.out.println("Sorry, no task found with this ID");
         }
     }
 
@@ -48,6 +67,7 @@ public class InMemoryRepository<TKey, TData extends BaseEntity<Integer>> impleme
 
     public TData updateOne(Integer id, TData entity) {
         this.entities.replace(id, entity);
+        System.out.println(entity);
         return entity;
     }
 }

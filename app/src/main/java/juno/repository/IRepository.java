@@ -2,6 +2,8 @@ package juno.repository;
 
 import juno.repository.exception.EntityNotFoundException;
 
+import java.util.ArrayList;
+
 /**
  * IRepository defines a method to get, store, and retrieve entities
  */
@@ -11,6 +13,8 @@ public interface IRepository<TKey, TData> {
      * Get an entity `T` by its identifier
      */
     public TData getOne(TKey id) throws EntityNotFoundException;
+
+   ArrayList<TData> getAll();
 
     /**
      * Delete an entity by its identifier

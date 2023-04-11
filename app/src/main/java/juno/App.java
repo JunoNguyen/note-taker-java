@@ -8,18 +8,28 @@ import juno.model.TodoEntity;
 import juno.repository.IRepository;
 import juno.repository.InMemoryRepository;
 
+import java.io.Console;
+import java.util.Scanner;
+
 public class App {
     public String getGreeting() {
         return "Hello World!";
     }
 
     public static void main(String[] args) {
-        if(System.console() == null) {
-            System.out.println("No console found");
-            return;
-        }
+//        System.out.println(System.console());
+//        if(System.console() == null) {
+//            System.out.println("No console found");
+//            return;
+//        }
         IRepository repository = new InMemoryRepository<Integer, TodoEntity>();
-        TodoController controller = new TodoController(repository);
-        controller.run();
+        Scanner console = new Scanner(System.in);
+        TodoController controller = new TodoController(repository, console);
+        try {
+            controller.run();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+//        controller.showRepository();
     }
 }
