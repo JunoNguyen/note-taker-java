@@ -35,7 +35,7 @@ public class TodoController {
             }
 
         TodoEntity newTodo = new TodoEntity(rand, todoDescription);
-            System.out.println(newTodo + " ID: " + rand);
+//            System.out.println(newTodo + " ID: " + rand);
             this.repository.addOne(newTodo);
 
     }
@@ -44,10 +44,16 @@ public class TodoController {
         System.out.println("Repository here: " + this.repository);
     }
 
-    private void handleDelete(Integer id) {
+    private void handleDelete(Integer id) throws EntityNotFoundException {
         /** Delete something from the repository **/
         /** Bonus: what happens if the ID doesn't exist? **/
-        this.repository.deleteOne(id);
+        try {
+            this.repository.deleteOne(id);
+        } catch (EntityNotFoundException e) {
+            System.out.println("Entity not found");
+        } catch (Exception e) {
+            System.out.println("Unexpected error occurred.");
+        }
     };
 
     private void handleUpdate (Integer id, String todoDescription) {
@@ -58,16 +64,18 @@ public class TodoController {
 
     private void handleList() throws EntityNotFoundException {
         ArrayList<TodoEntity> foundTodos = this.repository.getAll();
-        System.out.println(foundTodos);
-        for (int counter = 0; counter < foundTodos.size(); counter++) {
-            TodoEntity todo = foundTodos.get(counter);
-            System.out.println("ID: " + todo.getId() + " Description: " + todo.getDescription());
+        var builder = new StringBuilder();
+        for (int i = 0; i < foundTodos.size(); i++) {
+            TodoEntity todo = foundTodos.get(i);
+            builder.append(todo.toString());
+            builder.append("\n");
         }
+        System.out.println(builder);
     }
 
     private void handleGetOne(Integer id) throws EntityNotFoundException {
         TodoEntity data = this.repository.getOne(id);
-        System.out.println("ID: " + data.getId() + " Description: " + data.getDescription());
+        System.out.println(data.toString());
     }
 
     public void run() {

@@ -19,14 +19,14 @@ public interface IRepository<TKey, TData> {
     /**
      * Delete an entity by its identifier
      */
-    public void deleteOne(TKey id);
+    public void deleteOne(TKey id) throws EntityNotFoundException;
 
     /**
      * Add an entity
      */
     public TData addOne(TData entity);
 
-    public TData updateOne(TKey id, TData entity);
+    public TData updateOne(TKey id, TData entity) throws EntityNotFoundException;
 
     /**
      * Get the total number of entities in this repository

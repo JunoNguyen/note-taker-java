@@ -13,4 +13,10 @@ public class TodoEntity extends BaseEntity<Integer> {
     public String getDescription() {
         return description;
     }
+
+    public String toString() {
+        String id = "ID: " + this.getId().toString();
+        String description = "Description: " + this.getDescription().toString();
+        return id.concat(" " + description);
+    }
 }

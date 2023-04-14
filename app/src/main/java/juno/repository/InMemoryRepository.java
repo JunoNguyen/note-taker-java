@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 /**
  * An in-memory implementation of a repository
+ *
  * @param <TData> -- Class of entities stored in this repository
  */
 public class InMemoryRepository<TKey, TData extends BaseEntity<Integer>> implements IRepository<Integer, TData> {
@@ -27,7 +28,7 @@ public class InMemoryRepository<TKey, TData extends BaseEntity<Integer>> impleme
 
     @Override
     public TData getOne(Integer id) throws EntityNotFoundException {
-        if(this.entities.containsKey(id)) {
+        if (this.entities.containsKey(id)) {
             return this.entities.get(id);
         } else {
             throw new EntityNotFoundException("No entity found.");
@@ -36,26 +37,15 @@ public class InMemoryRepository<TKey, TData extends BaseEntity<Integer>> impleme
 
     @Override
     public ArrayList<TData> getAll() {
-        ArrayList<TData> allTodos = new ArrayList<TData>();
-        int max = 100000;
-        int min = 1;
-        int range = max - min + 1;
-        // IDS can range from 1 to 100000
-        for(int i = 0; i<= range; i++) {
-            if (this.entities.containsKey(i)) {
-                allTodos.add(this.entities.get(i));
-            }
-        }
-        return allTodos;
+        return new ArrayList<>(this.entities.values());
     }
 
     @Override
-    public void deleteOne(Integer id) {
-        if(this.entities.containsKey(id)) {
+    public void deleteOne(Integer id) throws EntityNotFoundException {
+        if (this.entities.containsKey(id)) {
             this.entities.remove(id);
-            System.out.println("Successfully deleted the task!");
         } else {
-            System.out.println("Sorry, no task found with this ID");
+            throw new EntityNotFoundException("No entity found");
         }
     }
 
@@ -65,9 +55,12 @@ public class InMemoryRepository<TKey, TData extends BaseEntity<Integer>> impleme
         return entity;
     }
 
-    public TData updateOne(Integer id, TData entity) {
-        this.entities.replace(id, entity);
-        System.out.println(entity);
-        return entity;
+    public TData updateOne(Integer id, TData entity) throws EntityNotFoundException {
+        if (this.entities.containsKey(id)) {
+            this.entities.replace(id, entity);
+            return entity;
+        } else {
+            throw new EntityNotFoundException("No entity found");
+        }
     }
 }
