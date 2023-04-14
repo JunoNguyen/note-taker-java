@@ -17,12 +17,14 @@ public class App {
     }
 
     public static void main(String[] args) {
-//        System.out.println(System.console());
-//        if(System.console() == null) {
-//            System.out.println("No console found");
-//            return;
-//        }
         IRepository repository = new InMemoryRepository<Integer, TodoEntity>();
+
+        try {
+            Serializer.deserializeCsv(repository, "saved-todos.csv");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         Scanner console = new Scanner(System.in);
         TodoController controller = new TodoController(repository, console);
         try {

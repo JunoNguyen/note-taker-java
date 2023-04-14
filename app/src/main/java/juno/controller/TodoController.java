@@ -1,5 +1,6 @@
 package juno.controller;
 
+import juno.Serializer;
 import juno.model.TodoEntity;
 import juno.repository.IRepository;
 import juno.repository.exception.EntityNotFoundException;
@@ -77,37 +78,43 @@ public class TodoController {
         int exitFlag = 0;
 
         while (exitFlag == 0) {
-            System.out.println("Enter command (create/update/delete/view/view one/exit): ");
-            String command = this.console.nextLine();
-            switch (command.trim()) {
-                case "create": {
-                    promptCreate();
-                    break;
-                }
-                case "update": {
-                    promptUpdate();
-                    break;
-                }
-                case "delete": {
-                    promptDelete();
-                    break;
-                }
-                case "view": {
-                    promptList();
-                    break;
-                }
-                case "view one": {
-                    promptListOne();
-                    break;
-                }
-                case "exit": {
-                    exitFlag = 1;
-                    System.out.println("Goodbye!");
-                    break;
-                }
-                default: {
-                    System.out.println("Sorry, I didn't understand that command.");
-                }
+            String command = "";
+                System.out.println("Enter command (create/update/delete/view/view one/exit): ");
+                command = this.console.nextLine();
+                switch (command.trim()) {
+                    case "create": {
+                        promptCreate();
+                        break;
+                    }
+                    case "update": {
+                        promptUpdate();
+                        break;
+                    }
+                    case "delete": {
+                        promptDelete();
+                        break;
+                    }
+                    case "view": {
+                        promptList();
+                        break;
+                    }
+                    case "view one": {
+                        promptListOne();
+                        break;
+                    }
+                    case "exit": {
+                        exitFlag = 1;
+                        try {
+                            Serializer.serialize(this.repository, "saved-todos.csv");
+                        } catch (Exception e) {
+                            System.out.println("Failed to save.");
+                        }
+                        System.out.println("Goodbye!");
+                        break;
+                    }
+                    default: {
+                        System.out.println("Sorry, I didn't understand that command.");
+                    }
             }
         }
     }
