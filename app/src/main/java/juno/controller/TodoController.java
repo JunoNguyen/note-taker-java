@@ -23,20 +23,19 @@ public class TodoController {
         /** Add something to the repository **/
         int rand = 0;
 
-            // define the range
-            int max = 100000;
-            int min = 1;
-            int range = max - min + 1;
-            rand = (int) (Math.random() * range) + min;
+        // define the range
+        int max = 100000;
+        int min = 1;
+        int range = max - min + 1;
+        rand = (int) (Math.random() * range) + min;
 
-            // This should keep creating a new rand num if it exists
-            while (this.repository.exists(rand)) {
-                rand = (int) (Math.random() * range) + min;
-            }
+        // This should keep creating a new rand num if it exists
+        while (this.repository.exists(rand)) {
+            rand = (int) (Math.random() * range) + min;
+        }
 
         TodoEntity newTodo = new TodoEntity(rand, todoDescription);
-//            System.out.println(newTodo + " ID: " + rand);
-            this.repository.addOne(newTodo);
+        this.repository.addOne(newTodo);
 
     }
 
@@ -47,16 +46,12 @@ public class TodoController {
     private void handleDelete(Integer id) throws EntityNotFoundException {
         /** Delete something from the repository **/
         /** Bonus: what happens if the ID doesn't exist? **/
-        try {
-            this.repository.deleteOne(id);
-        } catch (EntityNotFoundException e) {
-            System.out.println("Entity not found");
-        } catch (Exception e) {
-            System.out.println("Unexpected error occurred.");
-        }
-    };
+        this.repository.deleteOne(id);
+    }
 
-    private void handleUpdate (Integer id, String todoDescription) {
+    ;
+
+    private void handleUpdate(Integer id, String todoDescription) throws EntityNotFoundException {
         /** Update/replace an existing entity **/
         TodoEntity updatedTodo = new TodoEntity(id, todoDescription);
         this.repository.updateOne(id, updatedTodo);
@@ -81,10 +76,10 @@ public class TodoController {
     public void run() {
         int exitFlag = 0;
 
-        while(exitFlag == 0) {
+        while (exitFlag == 0) {
             System.out.println("Enter command (create/update/delete/view/view one/exit): ");
             String command = this.console.nextLine();
-                    switch (command.trim()) {
+            switch (command.trim()) {
                 case "create": {
                     promptCreate();
                     break;
@@ -146,6 +141,10 @@ public class TodoController {
             handleDelete(parsedId);
         } catch (NumberFormatException _e) {
             System.out.println("Sorry, I couldn't interpret that ID.");
+        } catch (EntityNotFoundException _e) {
+            System.out.println("Couldn't find that ID.");
+        } catch (Exception _e) {
+            System.out.println("Something went wrong.");
         }
     }
 
@@ -159,7 +158,12 @@ public class TodoController {
             handleUpdate(parsedId, todoDescription);
         } catch (NumberFormatException _e) {
             System.out.println("Sorry, I couldn't interpret that ID.");
+        } catch (EntityNotFoundException _e) {
+            System.out.println("Couldn't find that ID.");
+        } catch (Exception _e) {
+            System.out.println("Something went wrong.");
         }
+
     }
 
     private void promptList() {
