@@ -46,27 +46,15 @@ public class TodoController {
     private void handleDelete(Integer id) throws EntityNotFoundException {
         /** Delete something from the repository **/
         /** Bonus: what happens if the ID doesn't exist? **/
-        try {
-            this.repository.deleteOne(id);
-        } catch (EntityNotFoundException e) {
-            System.out.println("Entity not found");
-        } catch (Exception e) {
-            System.out.println("Unexpected error occurred.");
-        }
+        this.repository.deleteOne(id);
     }
 
     ;
 
     private void handleUpdate(Integer id, String todoDescription) throws EntityNotFoundException {
         /** Update/replace an existing entity **/
-        try {
-            TodoEntity updatedTodo = new TodoEntity(id, todoDescription);
-            this.repository.updateOne(id, updatedTodo);
-        } catch (EntityNotFoundException e) {
-            System.out.println("Entity not found");
-        } catch (Exception e) {
-            System.out.println("Unexpected error occurred.");
-        }
+        TodoEntity updatedTodo = new TodoEntity(id, todoDescription);
+        this.repository.updateOne(id, updatedTodo);
     }
 
     private void handleList() throws EntityNotFoundException {
