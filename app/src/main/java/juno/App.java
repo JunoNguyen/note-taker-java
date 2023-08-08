@@ -6,7 +6,7 @@ package juno;
 import juno.controller.TodoController;
 import juno.model.TodoEntity;
 import juno.repository.IRepository;
-import juno.repository.InMemoryRepository;
+import juno.repository.JDBCRepository;
 
 import java.io.Console;
 import java.util.Scanner;
@@ -17,13 +17,13 @@ public class App {
     }
 
     public static void main(String[] args) {
-        IRepository repository = new InMemoryRepository<Integer, TodoEntity>();
-
-        try {
-            Serializer.deserializeCsv(repository, "saved-todos.csv");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+//        IRepository repository = new InMemoryRepository<Integer, TodoEntity>();
+        IRepository repository = new JDBCRepository<Integer, TodoEntity>();
+//        try {
+//            Serializer.deserializeCsv(repository, "saved-todos.csv");
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
 
         Scanner console = new Scanner(System.in);
         TodoController controller = new TodoController(repository, console);
